@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coder.ww.mapper.UserMapper">
+
+    <resultMap id="User" type="com.coder.ww.entity.User">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <collection property="roles" javaType="java.util.ArrayList"
+                    ofType="com.coder.ww.entity.Role" column="id"
+                    select="queryRoles">
+        </collection>
+    </resultMap>
+
+    <resultMap id="Role" type="com.coder.ww.entity.Role">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <select id="queryRoles" resultMap="Role">
+        SELECT role.id, role.name, role.remark
+        FROM tb_role role
+        WHERE role.id in (
+            SELECT rship.role_id
+            FROM tb_role_group_relationship rship
+            WHERE rship.role_group_id in (
+                SELECT uship.role_group_id
+                FROM tb_user_role_group_relationship uship
+                WHERE uship.user_id = #{id}
+            )
+        )
+    </select>
+
+    <select id="findByUsername" resultMap="User">
+        SELECT id, username, password
+        FROM tb_user
+        WHERE username = #{username}
+    </select>
+
+    <insert id="save" parameterType="com.coder.ww.entity.User">
+        INSERT INTO tb_user
+        (username, password)
+        VALUES
+        (#{username,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR})
+    </insert>
+
+</mapper>

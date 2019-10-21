@@ -1,0 +1,34 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+#IDEA config file
+*.iml
+
+hs_err_pid*
+/.idea
+/*/logs
+/*/.idea
+/*/target
+/**/*-prod.properties
+
+.classpath
+.settings/
+.project
+
+target/*
